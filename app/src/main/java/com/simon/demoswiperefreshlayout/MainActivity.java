@@ -1,5 +1,6 @@
 package com.simon.demoswiperefreshlayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,13 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView (R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView (R.id.btn_another_activity)
+    Button btnAnotherActivity;
 
     private MyBaseAdapter adapter;
     private MyRecyclerViewAdapter recyclerViewAdapter;
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void viewSets() {
+        //Modified By xw 2016/6/1  Explain：下拉回调
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -68,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshData() {
-        if (swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
+        if (!swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(true);
         }
         recyclerViewAdapter.clear();
         new Thread() {
@@ -89,16 +94,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            swipeRefreshLayout.setRefreshing(false);
             recyclerViewAdapter.addItems(list);
         }
     };
 
-    static class ViewHolder {
-        @BindView (R.id.recycler_view)
-        RecyclerView recyclerView;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+    @OnClick (R.id.btn_another_activity)
+    public void onClick() {
+        Intent intent = new Intent(this, AnotherActivity.class);
+        startActivity(intent);
     }
 }

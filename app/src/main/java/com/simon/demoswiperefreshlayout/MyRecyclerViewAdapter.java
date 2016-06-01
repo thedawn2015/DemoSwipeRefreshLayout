@@ -35,7 +35,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(list.get(position));
+        holder.bindViews(list.get(position));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final String nameStr) {
+        public void bindViews(final String nameStr) {
             itemTvName.setText(nameStr);
             itemBtnClick.setText(nameStr);
             itemView.setOnClickListener(new View.OnClickListener() {
